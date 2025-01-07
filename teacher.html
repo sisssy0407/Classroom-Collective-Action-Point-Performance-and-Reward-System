@@ -1,0 +1,239 @@
+
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Page</title>
+  <style>
+    /* General styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Header section */
+    .header-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .image-div1 {
+      width: 30%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 30px;
+    }
+
+    /* Website name */
+    .website-name {
+      background-color: #4CAF50;
+      color: #fff;
+      font-size: x-large;
+      padding: 60px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: calc(100% - 40px); /* Adjust width to fit with the right margin of #user */
+      text-align: center;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-style: italic;
+      margin-top: 50px; /* Add margin to push the content down */
+    }
+
+    #user {
+      position: absolute;
+      top: 20px; /* Adjust as needed */
+      right: 40px; /* Adjust as needed */
+      background-color: white;
+      width: 500px; /* Adjust as needed */
+      border-radius: 20px;
+      padding: 0px; /* Increased padding for better spacing */
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px; /* Added gap between avatar and name */
+    }
+
+    /* Avatar */
+    #user-avatar {
+      width: 70px; /* Adjusted size */
+      height: 70px; /* Adjusted size */
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px; /* Added bottom margin */
+    }
+
+    /* Teacher name */
+    #user-name {
+      font-size: 20px; /* Adjusted size */
+      font-weight: bold;
+      color: green;
+    }
+
+    /* Notification section */
+    .notification-bar {
+      background-color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      color: #4CAF50;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .notification-list {
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .notification-item {
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .notification-item a {
+      text-decoration: none;
+      color: #4CAF50;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .button-container button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .button-container button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Header Section -->
+  <header class="header-container">
+    <!-- Logo Section -->
+    <div class="container">
+      <div class="image-div1">
+
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9vC7UYXRR60aVJ3ha9-A6tPVIylSYhxzQfg&s" alt="" style="width:150px;">
+      </div>
+
+      <!-- Website Name Section -->
+      <div class="website-name">Classroom Collective Action Point-Performance and Reward System</div>
+    </div>
+
+    <!-- Avatar Section -->
+    <div id="user" class="user">
+      <img id="user-avatar" src="" alt="Avatar" style="width: 50px; border-radius: 100%; height: 50px;">
+      <span id="user-name"></span>
+    </div>
+  </header>
+
+  <!-- Notification Section -->
+  <div class="notification-bar">Notifications</div>
+
+  <div id="notificationSection" class="notification-list"></div>
+
+  <script>
+	window.onload = function () {
+  const userData = JSON.parse(localStorage.getItem("user"));
+
+  // Validate user role and load user data
+  if (userData && userData.role === "teacher") {
+    document.getElementById("user-avatar").src = userData.avatar || "default-avatar.jpg";
+    document.getElementById("user-name").textContent = userData.name;
+  } else {
+    alert("No teacher data found!");
+    window.location.href = "signup.html";
+    return;
+  }
+
+  // Load submitted proof data
+  const taskData = JSON.parse(localStorage.getItem("submittedProof"));
+  if (taskData) {
+    const notificationSection = document.getElementById("notificationSection");
+
+    // Display notification details
+    taskData.tasks.forEach((task) => {
+      const listItem = document.createElement("div");
+      listItem.classList.add("notification-item");
+      listItem.textContent = `${task} - ${taskData.date}`;
+
+      if (taskData.proofFile) {
+        const fileLink = document.createElement("a");
+        fileLink.href = taskData.proofFile;
+        fileLink.textContent = " View Proof";
+        fileLink.target = "_blank";
+        listItem.appendChild(fileLink);
+      }
+
+      notificationSection.appendChild(listItem);
+    });
+
+    // Add Verify and Not Verify buttons
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("button-container");
+
+    const verifyButton = document.createElement("button");
+    verifyButton.textContent = "Verify";
+
+    const notVerifyButton = document.createElement("button");
+    notVerifyButton.textContent = "Not Verify";
+
+    buttonContainer.appendChild(verifyButton);
+    buttonContainer.appendChild(notVerifyButton);
+    notificationSection.appendChild(buttonContainer);
+
+    // Deduct points only on "Not Verify" click
+    notVerifyButton.addEventListener("click", () => {
+      let points = parseInt(localStorage.getItem("points")) || 0; // Start at 0 if no points exist
+      points -= 100; // Deduct 100 points
+      points = Math.max(points, 0); // Prevent negative points
+
+      // Save and update UI
+      localStorage.setItem("points", points);
+      alert("100 points deducted! Current points: " + points);
+    });
+
+    // Remove submitted proof data from localStorage
+    localStorage.removeItem("submittedProof");
+  }
+};
+  </script>
+</body>
+</html>                               
+
+

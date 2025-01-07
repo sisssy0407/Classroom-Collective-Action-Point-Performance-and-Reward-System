@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - CCAP-PRES</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f7f7f7;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            font-size: 1em;
+            color: #333;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="file"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <form id="signup-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="avatar">Upload Avatar:</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="role">Select Role:</label>
+        <select id="role" name="role" required>
+            <option value="">--Select--</option>
+            <option value="president">President</option>
+            <option value="teacher">Teacher</option>
+        </select><br>
+
+        <button type="submit">Sign Up</button>
+    </form>
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const avatar = document.getElementById('avatar').files[0];
+            const role = document.getElementById('role').value;
+
+            if (name && email && password && avatar && role) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const userData = {
+                        name: name,
+                        email: email,
+                        password: password,
+                        role: role,
+                        avatar: reader.result // Save image as base64 string
+                    };
+
+                    // Store user data in local storage
+                    localStorage.setItem('user', JSON.stringify(userData));
+
+                    // Redirect based on role
+                    if (role === 'president') {
+                        window.location.href = 'huh.html';
+                    } else if (role === 'teacher') {
+                        window.location.href = 'teacher.html';
+                    }
+                };
+                reader.readAsDataURL(avatar);
+            } else {
+                alert('Please fill out all fields.');
+            }
+        });
+    </script>
+
+</body>
+</html>
